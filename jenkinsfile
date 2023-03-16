@@ -1,9 +1,14 @@
 pipeline {
   agent {
-    node {
-      label 'nodejs'
+    kubernetes {
+      inheritFrom 'nodejs base'
+      containerTemplate {
+        name 'nodejs'
+        image '10.20.91.100/library/node-alpine-python:14.18.2'
+      }
     }
   }
+
   parameters{
      string(name:'TAG_NAME',defaultValue: '',description:'')
   }
