@@ -1,0 +1,66 @@
+pipeline {
+  agent {
+    node {
+      label 'nodejs'
+    }
+  }
+  parameters{
+     string(name:'TAG_NAME',defaultValue: '',description:'')
+  }
+  environment {
+    DOCKERHUB_CREDENTIAL_ID = 'harbor-id'
+    GITHUB_CREDENTIAL_ID  = 'gitlab-id'
+    KUBECONFIG_CREDENTIAL_ID  = 'kubeconfig'
+    REGISTRY = '10.20.91.100'
+    DOCKERHUB_NAMESPACE  = 'library'
+    GTIHUB_ACCOUNT  = 'lc'
+    APP_NAME  = 'vue-sample'
+  }
+  stages {
+    stage('checkout scm') {
+      steps {
+        checkout(scm)
+      }
+    }
+    stage('print node version') {
+      steps {
+        container('nodejs') {
+          sh 'node -v'
+          sh 'npm -v'
+        }
+      }
+    }
+    stage('get dependencies') {
+      steps {
+        container('nodejs') {
+          sh 'yarn config set ignore-engines true'
+          sh 'yarn'
+        }
+      }
+    }
+
+    stage('build & push snapshot') {
+      steps {
+        container('nodejs') {
+          sh 'yarn build-prod'
+          sh 'docker build -f Dockerfile-prod -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+          withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKERHUB_CREDENTIAL_ID" ,)]) {
+            sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+            sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER '
+          }
+        }
+      }
+    }
+
+    stage('deploy to prod') {
+      when{
+        branch 'master'
+      }
+      steps {
+        kubernetesDeploy(configs: 'deploy/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+      }
+    }
+
+  }
+
+}
