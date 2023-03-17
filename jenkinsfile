@@ -1,7 +1,7 @@
 pipeline {
     agent {
       kubernetes {
-        inheritFrom 'nodejs base'
+        inheritFrom 'nodejs'
         containerTemplate {
           name 'nodejs'
           image '10.20.91.100/library/node:14.18.2'
@@ -61,7 +61,7 @@ pipeline {
   
       stage('deploy to prod') {
         steps {
-          container ('nodejs') {
+          container ('base') {
             withCredentials([kubeconfigFile(credentialsId: env.KUBECONFIG_CREDENTIAL_ID,variable: 'KUBECONFIG')]) {
               sh 'envsubst < deploy/prod/devops.yaml | kubectl apply -f -'
               sh 'envsubst < deploy/prod/devops-svc.yaml | kubectl apply -f -'
