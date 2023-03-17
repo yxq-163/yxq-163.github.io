@@ -64,20 +64,13 @@ pipeline {
           branch 'master'
         }
         steps {
-  
-          container ('maven') {
-            withCredentials([
-            kubeconfigFile(
-            credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
-            variable: 'KUBECONFIG')
-          ]) {
-          sh 'envsubst < deploy/prod/devops.yaml | kubectl apply -f -'
-          sh 'envsubst < deploy/prod//devops-svc.yaml | kubectl apply -f -'
+          container ('nodejs') {
+            withCredentials([kubeconfigFile(credentialsId: env.KUBECONFIG_CREDENTIAL_ID,variable: 'KUBECONFIG')]) {
+              sh 'envsubst < deploy/prod/devops.yaml | kubectl apply -f -'
+              sh 'envsubst < deploy/prod/devops-svc.yaml | kubectl apply -f -'
+            }
+          }
+        }
       }
-  }
-  }
-      }
-  
     }
-  
   }
