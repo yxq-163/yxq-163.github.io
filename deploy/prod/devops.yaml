@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: Always
           name: vue-sample
           ports:
-            - containerPort: 8080
+            - containerPort: 8999
               protocol: TCP
           resources:
             limits:
