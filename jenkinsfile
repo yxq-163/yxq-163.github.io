@@ -60,9 +60,6 @@ pipeline {
       }
   
       stage('deploy to prod') {
-        when{
-          branch 'master'
-        }
         steps {
           container ('nodejs') {
             withCredentials([kubeconfigFile(credentialsId: env.KUBECONFIG_CREDENTIAL_ID,variable: 'KUBECONFIG')]) {
