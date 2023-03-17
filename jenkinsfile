@@ -1,73 +1,78 @@
 pipeline {
-  agent {
-    kubernetes {
-      inheritFrom 'nodejs base'
-      containerTemplate {
-        name 'nodejs'
-        image '10.20.91.100/library/node:14.18.2'
-      }
-    }
-  }
-
-
-  parameters{
-     string(name:'TAG_NAME',defaultValue: '',description:'')
-  }
-  environment {
-    DOCKERHUB_CREDENTIAL_ID = 'harbor-id'
-    GITHUB_CREDENTIAL_ID  = 'gitlab-id'
-    KUBECONFIG_CREDENTIAL_ID  = 'kubeconfig'
-    REGISTRY = '10.20.91.100'
-    DOCKERHUB_NAMESPACE  = 'library'
-    GTIHUB_ACCOUNT  = 'lc'
-    APP_NAME  = 'vue-sample'
-  }
-  stages {
-    stage('checkout scm') {
-      steps {
-        checkout(scm)
-      }
-    }
-    stage('print node version') {
-      steps {
-        container('nodejs') {
-          sh 'node -v'
-          sh 'npm -v'
-          sh 'docker version'
+    agent {
+      kubernetes {
+        inheritFrom 'nodejs base'
+        containerTemplate {
+          name 'nodejs'
+          image '10.20.91.100/library/node:14.18.2'
         }
       }
     }
-    stage('get dependencies') {
-      steps {
-        container('nodejs') {
-          sh 'yarn config set ignore-engines true'
-          sh 'yarn'
+  
+  
+    parameters{
+       string(name:'TAG_NAME',defaultValue: '',description:'')
+    }
+    environment {
+      DOCKERHUB_CREDENTIAL_ID = 'harbor-id'
+      GITHUB_CREDENTIAL_ID  = 'gitlab-id'
+      KUBECONFIG_CREDENTIAL_ID  = 'kubeconfig'
+      REGISTRY = '10.20.91.100'
+      DOCKERHUB_NAMESPACE  = 'library'
+      GTIHUB_ACCOUNT  = 'lc'
+      APP_NAME  = 'vue-sample'
+    }
+    stages {
+      stage('checkout scm') {
+        steps {
+          checkout(scm)
         }
       }
-    }
-
-    stage('build & push snapshot') {
-      steps {
-        container('nodejs') {
-          sh 'yarn build'
-          sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
-          withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKERHUB_CREDENTIAL_ID" ,)]) {
-            sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-            sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER '
+      stage('print node version') {
+        steps {
+          container('nodejs') {
+            sh 'node -v'
+            sh 'npm -v'
+            sh 'docker version'
           }
         }
       }
-    }
-
-    stage('deploy to prod') {
-      when{
-        branch 'master'
+      stage('get dependencies') {
+        steps {
+          container('nodejs') {
+            sh 'yarn config set ignore-engines true'
+            sh 'yarn'
+          }
+        }
       }
-      steps {
-        kubernetesDeploy(configs: 'deploy/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+  
+      stage('build & push snapshot') {
+        steps {
+          container('nodejs') {
+            sh 'yarn build'
+            sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+            withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKERHUB_CREDENTIAL_ID" ,)]) {
+              sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+              sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER '
+            }
+          }
+        }
       }
-    }
-
+  
+      stage('deploy to prod') {
+        when{
+          branch 'master'
+        }
+        steps {
+  
+          container ('maven') {
+            withCredentials([
+            kubeconfigFile(
+            credentialsId: env.KUBECONFIG_CREDENTIAL_ID,
+            variable: 'KUBECONFIG')
+          ]) {
+          sh 'envsubst < deploy/prod/devops.yaml | kubectl apply -f -'
+          sh 'envsubst < deploy/prod//devops-svc.yaml | kubectl apply -f -'
+      }
   }
-
-}
+  }
