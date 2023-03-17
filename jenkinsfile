@@ -32,6 +32,7 @@ pipeline {
         container('nodejs') {
           sh 'node -v'
           sh 'npm -v'
+          sh 'docker vesion'
         }
       }
     }
