@@ -4,7 +4,7 @@ pipeline {
       inheritFrom 'nodejs base'
       containerTemplate {
         name 'nodejs'
-        image '10.20.91.100/library/node-alpine-python:14.18.2'
+        image '10.20.91.100/library/node:14.18.2'
       }
     }
   }
