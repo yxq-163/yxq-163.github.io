@@ -5,7 +5,7 @@ metadata:
     app: kubesphere
     component: vue-sample
   name: vue-sample
-  namespace: vuesample
+  namespace: vue-sample
 spec:
   ports:
     - name: http
