@@ -60,14 +60,18 @@ pipeline {
       }
   
       stage('deploy to prod') {
-        steps {
-          container ('base') {
-            withCredentials([kubeconfigFile(credentialsId: env.KUBECONFIG_CREDENTIAL_ID,variable: 'KUBECONFIG')]) {
-              sh 'envsubst < deploy/prod/devops.yaml | kubectl apply -f -'
-              sh 'envsubst < deploy/prod/devops-svc.yaml | kubectl apply -f -'
-            }
-          }
-        }
+      agent none
+      steps {
+        container('base') {
+          withCredentials([kubeconfigContent(credentialsId : 'demo-kubeconfig' ,variable : 'KUBECONFIG_CONTENT' ,)]) {
+            sh '''mkdir ~/.kube
+
+echo "$KUBECONFIG_CONTENT" > ~/.kube/config
+
+envsubst < deploy/prod/devops-svc.yaml | kubectl apply -f -
+
+envsubst < deploy/prod/devops.yaml | kubectl apply -f -
+'''
       }
     }
   }
