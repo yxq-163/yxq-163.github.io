@@ -75,3 +75,6 @@ envsubst < deploy/prod/devops.yaml | kubectl apply -f -
       }
     }
   }
+      }
+    }
+}
