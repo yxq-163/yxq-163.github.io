@@ -63,7 +63,7 @@ pipeline {
       agent none
       steps {
         container('base') {
-          withCredentials([kubeconfigContent(credentialsId : 'demo-kubeconfig' ,variable : 'KUBECONFIG_CONTENT' ,)]) {
+          withCredentials([kubeconfigContent(credentialsId : 'kubeconfig' ,variable : 'KUBECONFIG_CONTENT' ,)]) {
             sh '''mkdir ~/.kube
 
 echo "$KUBECONFIG_CONTENT" > ~/.kube/config
