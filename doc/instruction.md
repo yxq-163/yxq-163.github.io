@@ -74,7 +74,7 @@ docker run \
 # 3 gitlab runner 部署
 
 ## 3.1 安装及配置kubectl
-此步骤目的在于使runner服务器可以操作生产环境的k8s集群，在服务器配置一次即可，若项目不基于k8s部署，可跳过。
+此步骤目的在于使runner服务器可以操作生产环境的k8s集群，在服务器配置一次即可，若项目不基于k8s部署，可跳过该步骤。
 
 ```
 mkdir -p /usr/local/bin/
@@ -90,10 +90,12 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)    
 
 ## 3.2 创建gitlab runner容器
-
+### 3.2.1标准规范
 镜像为gitlab官方gitlab-runner镜像  
 容器命名为 gitlab-runner-{工程名}-{序号}  
-容器目录命名： /data/gitlab/gitlab-runner/{工程名}-{序号}，如：  
+容器目录命名： /data/gitlab/gitlab-runner/{工程名}-{序号}  
+
+### 3.2.2脚本文件
 
 ```
 docker run -d --name gitlab-runner-sample-01 --restart always \
@@ -105,14 +107,15 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
 示例脚本：[gitlab-runner-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-runner-create.sh)  
 
 ## 3.3 gitlab runner配置
+###3.3.1标准规范
+runner描述格式为：gitlab-runner-{工程名}-{序号}  
+runner tags如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
 
 进入上步创建的容器示例，注册gitlab  
 ```
 docker exec -it gitlab-runner-sample-01 /bin/bash  
 ```
 输入命令gitlab-runner register，根据提示依次设置  
-容器描述格式为：gitlab-runner-{工程名}-{序号}  
-tags建议如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
 
 ![runner-register](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/register.png)
 
@@ -217,18 +220,35 @@ docker-build-and-deploy-k8s:
 
 ## 4.2 环境变量
 ### 4.2.1 标准规范
+变量使用原则：涉及地址、路径、账号、密码、项目名称等，并且在配置文件中多次使用的变量，可以提取为环境变量
 变量命名规范：环境变量名使用英文大写，多个单词间使用下划线连接。
+变量保存位置：  
 存放账号、密码及其它敏感信息的环境变量，应避免通过明文保存在.yml配置文件中，需要通过gitlab CICD 设置外部环境变量。
 
-图xx
+![env](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env.png)
+
+<font color=red>注意如果流水线对应分支为非保护分支，则需要取消以下选项勾选。</font>
+
+![env1](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env1.png)
 
 一般环境变量通过variables，保存在yml文件中。
-以下给出约定的环境变量名：
+
+```
+variables:
+
+  #docker服务启动参数
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2 
+  DOCKER_TLS_CERTDIR: ""
+  #下面流水线需要用到的变量
+
+```
+
+常用环境变量名：
 
 HARBOR_URL                  #harbor地址  
 HARBOR_PASSWORD             #harbor登录密码  
 HARBOR_USER                 #harbor登录账号  
-
 KUBECONFIG                  #kubeconfig认证文件路径  
 DOCKER_HOST                 #docker服务启动参数  
 DOCKER_DRIVER               #docker服务启动参数  
