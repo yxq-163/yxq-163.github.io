@@ -226,31 +226,31 @@ docker-build-and-deploy-k8s:
 一般环境变量通过variables，保存在yml文件中。
 以下给出约定的环境变量名：
 
-HARBOR_URL                  #harbor地址
-HARBOR_PASSWORD             #harbor登录密码
-HARBOR_USER                 #harbor登录账号
+HARBOR_URL                  #harbor地址  
+HARBOR_PASSWORD             #harbor登录密码  
+HARBOR_USER                 #harbor登录账号  
 
-KUBECONFIG                  #kubeconfig认证文件路径
-DOCKER_HOST                 #docker服务启动参数
-DOCKER_DRIVER               #docker服务启动参数
-DOCKER_TLS_CERTDIR          #docker服务启动参数
-HARBOR_NAMESPACE            #harobor仓库命名空间
-BRANCH_NAME                 #工程分支名称
-APP_NAME                    #工程镜像名称（harbor仓库中使用）
-BUILD_NUMBER                #流水线序号
+KUBECONFIG                  #kubeconfig认证文件路径  
+DOCKER_HOST                 #docker服务启动参数  
+DOCKER_DRIVER               #docker服务启动参数  
+DOCKER_TLS_CERTDIR          #docker服务启动参数  
+HARBOR_NAMESPACE            #harobor仓库命名空间  
+BRANCH_NAME                 #工程分支名称  
+APP_NAME                    #工程镜像名称（harbor仓库中使用）  
+BUILD_NUMBER                #流水线序号  
 
 ## 4.3 job配置
 ### 4.3.1标准规范
 
-job命名规范：全英文小写，单词间使用'-'连接
-主要参数：
-stage：job所属流水线阶段
-image：excutor基础镜像
-services：使用did方式实际执行脚本的镜像
-script： 执行脚本，实现打包部署等操作
-rules： 设置job规则
+job命名规范：全英文小写，单词间使用'-'连接  
+主要参数：  
+stage：job所属流水线阶段  
+image：excutor基础镜像  
+services：使用did方式实际执行脚本的镜像  
+script： 执行脚本，实现打包部署等操作  
+rules： 设置job规则  
 
-示例文件：.gitlab-ci.yml
+示例文件：[.gitlab-ci.yml](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/.gitlab-ci.yml)
 
 # 5 gitlab-ci 执行及调试
 待补充
