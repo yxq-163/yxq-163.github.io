@@ -7,21 +7,21 @@
 
 
 ## 0.1 主要文件目录
-├── deploy\prod/                        # K8S脚本
-│   └── devops-svc.yaml                 # service部署脚本
-│   └── devops-yaml                     # deploy部署脚本
-├── docs/                               # 文档
-│   └── config.toml                     # gitlab runner 配置示例文件
-│   └── gitlab-runner-create.sh         # gitlab runner 容器启动命令
-│   └── instruction.md                  # 使用说明
-│   └── kubectl-config.sh               # kubectl部署及配置
-│   └── gitlab-create.sh                # gitlab启动命令
-├── public/                             # 入口 HTML
-├── src/                                # vue源码
-├── Dockerfile                          # dockers镜像打包脚本
-├── default.conf                        # nginx配置文件
-├── README.md                           # README.md
-└── vue.config.js                       # vue 配置文件
+├── deploy\prod/                        # K8S脚本  
+│   └── devops-svc.yaml                 # service部署脚本  
+│   └── devops-yaml                     # deploy部署脚本  
+├── docs/                               # 文档  
+│   └── config.toml                     # gitlab runner 配置示例文件  
+│   └── gitlab-runner-create.sh         # gitlab runner 容器启动命令  
+│   └── instruction.md                  # 使用说明  
+│   └── kubectl-config.sh               # kubectl部署及配置  
+│   └── gitlab-create.sh                # gitlab启动命令  
+├── public/                             # 入口 HTML  
+├── src/                                # vue源码  
+├── Dockerfile                          # dockers镜像打包脚本  
+├── default.conf                        # nginx配置文件  
+├── README.md                           # README.md  
+└── vue.config.js                       # vue 配置文件  
 
 ## 0.2 使用方式简介
 拉取项目代码，按照说明文档进行系统配置，相关脚本均在doc目录下
@@ -30,6 +30,9 @@
 
 # 1 总体流程
 图一为jenkins流水线
+![Jenkins Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/pic/jenkins.png)
+
+
 
 图二gitlab-ci流水线
 
