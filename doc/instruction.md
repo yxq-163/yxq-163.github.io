@@ -227,7 +227,7 @@ docker-build-and-deploy-k8s:
 
 ![env](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env.png)
 
-<font color=red>注意如果流水线对应分支为非保护分支，则需要取消以下选项勾选。</font>
+<font color=#0099ff>注意如果流水线对应分支为非保护分支，则需要取消以下选项勾选。</font>
 
 ![env2](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env2.png)
 
