@@ -88,7 +88,7 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 其中"10.20.91.101  lb.kubesphere.local" 从k8s服务器hosts文件中获取。
 若在runner服务器执行命令kubectl get nodes可以查询到集群信息，代表部署成功。
 
-示例脚本：kubectl-config.sh
+示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)
 
 ## 3.3 创建gitlab runner容器
 
@@ -103,23 +103,25 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
   gitlab/gitlab-runner:latest
 ```
 
-示例脚本：gitlab-runner-create.sh
+示例脚本：[gitlab-runner-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-runner-create.sh)
 
 ## 3.4 gitlab runner配置
 
-进入上步创建的容器示例，注册gitlab
-docker exec -it gitlab-runner-sample-01 /bin/bash
-输入命令gitlab-runner register，根据提示依次设置
-容器描述格式为：gitlab-runner-{工程名}-{序号}
-tags建议如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";
+进入上步创建的容器示例，注册gitlab  
+```
+docker exec -it gitlab-runner-sample-01 /bin/bash  
+```
+输入命令gitlab-runner register，根据提示依次设置  
+容器描述格式为：gitlab-runner-{工程名}-{序号}  
+tags建议如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
 
-图片3
+![runner-register](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/register.png)
 
-共享runner的token获取方式：
-图片6
+共享runner的token获取方式：  
+![shared-runner](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/shared.png)
 
 指派runner的token获取方式：
-图片7
+![arranged-runner](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/point.png)
 
 注册完成后，会在runner持久化目录下生成config.toml文件，可以通过对文件的修改，更新runner的配置。
 将config.toml文件中privileged 设置为true （docker in docker 模式需要管理员权限）
@@ -158,9 +160,9 @@ check_interval = 0
 ```
 
 注册完成后，可以在gitlab中，查看到runner信息。
-图片5
 
-示例gitlab runner 配置文件： config.toml
+
+示例gitlab runner 配置文件： [config.toml](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/config.toml)
 
 ---
 
