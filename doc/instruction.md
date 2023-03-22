@@ -215,7 +215,7 @@ docker-build-and-deploy-k8s:
 
 ```
 
-示例文件：.gitlab-ci.yml
+示例文件：[.gitlab-ci.yml](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/.gitlab-ci.yml)  
 更多说明可以参考官方文档：http://10.20.91.100:9980/root/vue-sample-1/-/settings/ci_cd
 
 ## 4.2 环境变量
@@ -229,7 +229,7 @@ docker-build-and-deploy-k8s:
 
 <font color=red>注意如果流水线对应分支为非保护分支，则需要取消以下选项勾选。</font>
 
-![env1](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env1.png)
+![env2](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env2.png)
 
 
 一般环境变量通过variables，保存在yml文件中。
