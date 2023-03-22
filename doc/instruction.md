@@ -30,7 +30,7 @@
 
 # 1 总体流程
 图一为jenkins流水线
-![Jenkins Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/pic/jenkins.png)
+![Jenkins Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/jenkins.png)
 
 
 
