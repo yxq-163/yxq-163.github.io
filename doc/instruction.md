@@ -72,9 +72,8 @@ docker run \
 ---
 
 # 3 gitlab runner 部署
-## 3.1 标准规范
 
-## 3.2 安装及配置kubectl
+## 3.1 安装及配置kubectl
 此步骤目的在于使runner服务器可以操作生产环境的k8s集群，在服务器配置一次即可，若项目不基于k8s部署，可跳过。
 
 ```
@@ -90,7 +89,7 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 
 示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)    
 
-## 3.3 创建gitlab runner容器
+## 3.2 创建gitlab runner容器
 
 镜像为gitlab官方gitlab-runner镜像  
 容器命名为 gitlab-runner-{工程名}-{序号}  
@@ -105,7 +104,7 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
 
 示例脚本：[gitlab-runner-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-runner-create.sh)  
 
-## 3.4 gitlab runner配置
+## 3.3 gitlab runner配置
 
 进入上步创建的容器示例，注册gitlab  
 ```
