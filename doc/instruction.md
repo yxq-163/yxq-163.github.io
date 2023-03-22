@@ -29,12 +29,11 @@
 ---
 
 # 1 总体流程
-图一为jenkins流水线
+图一为jenkins流水线  
 ![Jenkins Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/jenkins.png)
 
-
-
-图二gitlab-ci流水线
+图二gitlab-ci流水线  
+![gitlab-ci Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/gitlab.png)
 
 gitlab runner基本等同于jenkins的作用，通过流水线执行脚本进行项目编译、打包、发布等工作，需要与harbor，k8s进行交互。
 gitlab runner分为共享runner和指派runner，共享runner可以被所有项目使用，指派runner一般指派个特定的一个或几个项目。每个项目可以关联任意数量的共享runner和指派runner，在项目ci流程触发后，系统会选择一个runner执行本次的ci流程，其中共享runner的tags必须与job中设定的tags匹配才可匹配选择。
@@ -44,11 +43,29 @@ runner为流水线运行的基础环境，runner会根据.gitlab-ci.yml，调度
 
 # 2 gitlab部署
 ## 2.1 标准规范
-待补充
+镜像示例命名：gitlab{版本号}
+容器本地映射目录：
+/data/gitlab/{版本号}/config    #映射培训文件
+/data/gitlab/{版本号}/logs      #映射日志文件
+/data/gitlab/{版本号}/data      #映射数据文件
+端口映射：
+9980-http端口
+9922-ssh端口
 
 ## 2.2 部署脚本
-gitlab 部署脚本
-持久化目录为：
+```
+docker run \
+ -itd  \
+ -p 9980:9980 \
+ -p 9922:22 \
+ -v /data/gitlab/15.8.0/config:/etc/gitlab  \
+ -v /data/gitlab/15.8.0/logs:/var/log/gitlab \
+ -v /data/gitlab/15.8.0/data:/var/opt/gitlab \
+ --restart always \
+ --privileged=true \
+ --name gitlab15.8.0 \
+ gitlab/gitlab-ce:15.8.0-ce.0
+```
 
 示例脚本：/doc/gitlab-create.sh
 
