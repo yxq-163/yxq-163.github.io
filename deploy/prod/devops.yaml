@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   labels:
     app: kubesphere
-    component: vue-sample
+    component: vue-ci-sample
     tier: frontend
-  name: vue-sample
-  namespace: vue-sample
+  name: vue-ci-sample
+  namespace: vue-ci-sample
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   selector:
     matchLabels:
       app: kubesphere
-      component: vue-sample
+      component: vue-ci-sample
       tier: frontend
   template:
     metadata:
       labels:
         app: kubesphere
-        component: vue-sample
+        component: vue-ci-sample
         tier: frontend
     spec:
       containers:
@@ -30,7 +30,7 @@ spec:
             value: 3d
           image: $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER
           imagePullPolicy: Always
-          name: vue-sample
+          name: vue-ci-sample
           ports:
             - containerPort: 8999
               protocol: TCP

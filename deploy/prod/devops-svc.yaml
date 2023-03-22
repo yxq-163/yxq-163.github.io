@@ -3,9 +3,9 @@ kind: Service
 metadata:
   labels:
     app: kubesphere
-    component: vue-sample
+    component: vue-ci-sample
   name: vue-sample
-  namespace: vue-sample
+  namespace: vue-ci-sample
 spec:
   ports:
     - name: http
@@ -15,7 +15,7 @@ spec:
       nodePort: 30489
   selector:
     app: kubesphere
-    component: vue-sample
+    component: vue-ci-sample
     tier: frontend
   sessionAffinity: None
   type: NodePort
