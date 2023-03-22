@@ -43,14 +43,14 @@ runner为流水线运行的基础环境，runner会根据.gitlab-ci.yml，调度
 
 # 2 gitlab部署
 ## 2.1 标准规范
-镜像示例命名：gitlab{版本号}
-容器本地映射目录：
-/data/gitlab/{版本号}/config    #映射培训文件
-/data/gitlab/{版本号}/logs      #映射日志文件
-/data/gitlab/{版本号}/data      #映射数据文件
-端口映射：
-9980-http端口
-9922-ssh端口
+镜像示例命名：gitlab{版本号}  
+容器本地映射目录：  
+/data/gitlab/{版本号}/config    #映射配置文件  
+/data/gitlab/{版本号}/logs      #映射日志文件  
+/data/gitlab/{版本号}/data      #映射数据文件  
+端口映射：  
+9980-http端口  
+9922-ssh端口  
 
 ## 2.2 部署脚本
 ```
@@ -67,7 +67,7 @@ docker run \
  gitlab/gitlab-ce:15.8.0-ce.0
 ```
 
-示例脚本：[my website]: http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-create.sh
+示例脚本：[gitlab-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-create.sh)
 
 ---
 
