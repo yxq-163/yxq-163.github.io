@@ -35,9 +35,9 @@
 图二gitlab-ci流水线  
 ![gitlab-ci Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/gitlab.png)
 
-gitlab runner基本等同于jenkins的作用，通过流水线执行脚本进行项目编译、打包、发布等工作，需要与harbor，k8s进行交互。
-有两类gitlab runner：共享runner和指派runner，共享runner可以被所有项目使用，指派runner一般指派个特定的一个或几个项目。每个工程项目可以关联任意数量的共享runner和指派runner，在项目ci流程触发后，系统会选择一个runner执行本次的ci流程，其中共享runner的tags必须与job中设定的tags匹配才可匹配选择。
-runner为流水线运行的基础环境，runner会根据.gitlab-ci.yml，调度excuter来执行文件中定义的各个job，完成流水线各个步骤
+gitlab runner基本等同于jenkins的作用，通过流水线执行脚本进行项目编译、打包、发布等工作，需要与harbor，k8s进行交互。  
+有两类gitlab runner：共享runner和指派runner，共享runner可以被所有项目使用，指派runner一般指派个特定的一个或几个项目。每个工程项目可以关联任意数量的共享runner和指派runner，在项目ci流程触发后，系统会选择一个runner执行本次的ci流程，其中共享runner的tags必须与job中设定的tags匹配才可匹配选择。  
+runner为流水线运行的基础环境，runner会根据.gitlab-ci.yml，调度excuter来执行文件中定义的各个job，完成流水线各个步骤。  
 
 ---
 
@@ -67,7 +67,7 @@ docker run \
  gitlab/gitlab-ce:15.8.0-ce.0
 ```
 
-示例脚本：/doc/gitlab-create.sh
+示例脚本：[my website]: http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-create.sh
 
 ---
 
