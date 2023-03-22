@@ -72,7 +72,6 @@ docker run \
 ---
 
 # 3 gitlab runner 部署
-
 ## 3.1 安装及配置kubectl
 此步骤目的在于使runner服务器可以操作生产环境的k8s集群，在服务器配置一次即可，若项目不基于k8s部署，可跳过该步骤。
 
@@ -111,6 +110,7 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
 runner描述格式为：gitlab-runner-{工程名}-{序号}  
 runner tags如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
 
+###3.3.2配置过程
 进入上步创建的容器示例，注册gitlab  
 ```
 docker exec -it gitlab-runner-sample-01 /bin/bash  
@@ -230,6 +230,7 @@ docker-build-and-deploy-k8s:
 <font color=red>注意如果流水线对应分支为非保护分支，则需要取消以下选项勾选。</font>
 
 ![env1](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/env1.png)
+
 
 一般环境变量通过variables，保存在yml文件中。
 
