@@ -43,7 +43,7 @@ runner为流水线运行的基础环境，runner会根据.gitlab-ci.yml，调度
 
 # 2 gitlab部署
 ## 2.1 标准规范
-镜像示例命名：gitlab{版本号}  
+镜像实例命名：gitlab{版本号}  
 容器本地映射目录：  
 /data/gitlab/{版本号}/config    #映射配置文件  
 /data/gitlab/{版本号}/logs      #映射日志文件  
@@ -88,7 +88,7 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 其中"10.20.91.101  lb.kubesphere.local" 从k8s服务器hosts文件中获取。
 若在runner服务器执行命令kubectl get nodes可以查询到集群信息，代表部署成功。
 
-示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)
+示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)  
 
 ## 3.3 创建gitlab runner容器
 
