@@ -36,13 +36,16 @@
 ![gitlab-ci Pipeline](http://10.20.91.100:9980/root/vue-ci-sample/-/raw/master/doc/pic/gitlab.png)
 
 gitlab runner基本等同于jenkins的作用，通过流水线执行脚本进行项目编译、打包、发布等工作，需要与harbor，k8s进行交互。  
-有两类gitlab runner：共享runner和指派runner，共享runner可以被所有项目使用，指派runner一般指派个特定的一个或几个项目。每个工程项目可以关联任意数量的共享runner和指派runner，在项目ci流程触发后，系统会选择一个runner执行本次的ci流程，其中共享runner的tags必须与job中设定的tags匹配才可匹配选择。  
+有两类gitlab runner：共享runner和指派runner，共享runner可以被所有项目使用，指派runner一般绑定特定的一个或几个项目。
+每个工程项目可以关联任意数量的共享runner和指派runner，在项目ci流程触发后，系统会选择一个runner调度本次的ci流程，其中共享runner的tags必须与job中设定的tags匹配才可匹配选择。  
 runner为流水线运行的管理调度中心，runner会根据.gitlab-ci.yml，调度excuter来执行文件中定义的各个job，完成流水线各个步骤。  
 
 ---
 
-# 2 gitlab部署
-## 2.1 标准规范
+# 2 标准规范
+
+# 3 gitlab部署
+## 3.1 标准规范
 镜像实例命名：gitlab{版本号}  
 容器本地映射目录：  
 /data/gitlab/{版本号}/config    #映射配置文件  
@@ -52,7 +55,7 @@ runner为流水线运行的管理调度中心，runner会根据.gitlab-ci.yml，
 9980-http端口  
 9922-ssh端口  
 
-## 2.2 部署脚本
+## 3.2 部署脚本
 ```
 docker run \
  -itd  \
@@ -71,8 +74,8 @@ docker run \
 
 ---
 
-# 3 gitlab runner 部署
-## 3.1 安装及配置kubectl
+# 4 gitlab runner 部署
+## 4.1 安装及配置kubectl
 此步骤目的在于使runner服务器可以操作生产环境的k8s集群，在服务器配置一次即可，若项目不基于k8s部署，可跳过该步骤。
 
 ```
@@ -88,13 +91,13 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 
 示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)    
 
-## 3.2 创建gitlab runner容器
-### 3.2.1标准规范
+## 4.2 创建gitlab runner容器
+### 4.2.1标准规范
 镜像为gitlab官方gitlab-runner镜像  
 容器命名为 gitlab-runner-{工程名}-{序号}  
 容器目录命名： /data/gitlab/gitlab-runner/{工程名}-{序号}  
 
-### 3.2.2脚本文件
+### 4.2.2脚本文件
 
 ```
 docker run -d --name gitlab-runner-sample-01 --restart always \
@@ -105,7 +108,7 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
 
 示例脚本：[gitlab-runner-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-runner-create.sh)  
 
-## 3.3 gitlab runner配置
+## 4.3 gitlab runner配置
 ###3.3.1标准规范
 runner描述格式为：gitlab-runner-{工程名}-{序号}  
 runner tags如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
@@ -168,8 +171,8 @@ check_interval = 0
 
 ---
 
-# 4 gitlab executor 配置
-## 4.1 .gitlab-ci.yml说明
+# 5 gitlab executor 配置
+## 5.1 .gitlab-ci.yml说明
 .gitlab-ci.yml文件一般放在根目录下，用于定义流水线各个执行器及job。
 
 yml文件分为两部分，全局配置与job配置。
@@ -218,8 +221,8 @@ docker-build-and-deploy-k8s:
 示例文件：[.gitlab-ci.yml](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/.gitlab-ci.yml)  
 更多说明可以参考官方文档：http://10.20.91.100:9980/root/vue-sample-1/-/settings/ci_cd
 
-## 4.2 环境变量
-### 4.2.1 标准规范
+## 5.2 环境变量
+### 5.2.1 标准规范
 变量使用原则：涉及地址、路径、账号、密码、项目名称等，并且在配置文件中多次使用的变量，可以提取为环境变量
 变量命名规范：环境变量名使用英文大写，多个单词间使用下划线连接。
 变量保存位置：  
@@ -259,11 +262,11 @@ BRANCH_NAME                 #工程分支名称
 APP_NAME                    #工程镜像名称（harbor仓库中使用）  
 BUILD_NUMBER                #流水线序号  
 
-## 4.3 job配置
-### 4.3.1标准规范
+## 5.3 job配置
+### 5.3.1标准规范
 job命名规范：全英文小写，单词间使用'-'连接  
 
-### 4.3.2job参数说明
+### 5.3.2job参数说明
 主要参数：  
 stage：job所属流水线阶段  
 image：excutor基础镜像  
@@ -273,5 +276,5 @@ rules： 设置job规则
 
 示例文件：[.gitlab-ci.yml](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/.gitlab-ci.yml)
 
-# 5 gitlab-ci 执行及调试
+# 6 gitlab-ci 执行及调试
 待补充
