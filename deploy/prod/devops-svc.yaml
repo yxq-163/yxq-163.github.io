@@ -4,7 +4,7 @@ metadata:
   labels:
     app: kubesphere
     component: vue-ci-sample
-  name: vue-sample
+  name: vue-ci-sample
   namespace: vue-ci-sample
 spec:
   ports:
