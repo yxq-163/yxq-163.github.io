@@ -24,7 +24,7 @@
 └── vue.config.js                       # vue 配置文件  
 
 ## 0.2 使用方式简介
-拉取项目代码，按照说明文档进行系统配置，相关脚本均在doc目录下
+拉取项目代码，切换到master分支，按照说明文档进行系统配置，相关脚本均在doc目录下
 
 ---
 
@@ -43,9 +43,11 @@ runner为流水线运行的管理调度中心，runner会根据.gitlab-ci.yml，
 ---
 
 # 2 标准规范
+## 2.1 域名规范
+gitlab： gitlab.{baseUrl}
+harbor:  harobr.{baseUrl}
 
-# 3 gitlab部署
-## 3.1 标准规范
+## 2.2 gitlab部署规范
 镜像实例命名：gitlab{版本号}  
 容器本地映射目录：  
 /data/gitlab/{版本号}/config    #映射配置文件  
@@ -55,7 +57,17 @@ runner为流水线运行的管理调度中心，runner会根据.gitlab-ci.yml，
 9980-http端口  
 9922-ssh端口  
 
-## 3.2 部署脚本
+## 2.3 gitlab-runner部署规范
+容器命名为 gitlab-runner-{工程名}-{序号}  
+容器目录命名： /data/gitlab/gitlab-runner/{工程名}-{序号}  
+
+runner描述格式为：gitlab-runner-{工程名}-{序号}  
+runner tags如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
+
+# 3 gitlab部署
+## 3.1 部署脚本
+规范参照2.2
+
 ```
 docker run \
  -itd  \
@@ -92,12 +104,8 @@ echo "10.20.91.101  lb.kubesphere.local" >> /etc/hosts
 示例脚本：[kubectl-config.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/kubectl-config.sh)    
 
 ## 4.2 创建gitlab runner容器
-### 4.2.1标准规范
-镜像为gitlab官方gitlab-runner镜像  
-容器命名为 gitlab-runner-{工程名}-{序号}  
-容器目录命名： /data/gitlab/gitlab-runner/{工程名}-{序号}  
-
-### 4.2.2脚本文件
+### 4.2.1脚本文件
+参照规范2.3，runner名称与文件路径不可重复，如果服务器上已有同名runner实例，需要修改脚本中的 name 及映射路径。
 
 ```
 docker run -d --name gitlab-runner-sample-01 --restart always \
@@ -109,11 +117,11 @@ docker run -d --name gitlab-runner-sample-01 --restart always \
 示例脚本：[gitlab-runner-create.sh](http://10.20.91.100:9980/root/vue-ci-sample/-/blob/master/doc/gitlab-runner-create.sh)  
 
 ## 4.3 gitlab runner配置
-###3.3.1标准规范
+### 4.3.1标准规范
 runner描述格式为：gitlab-runner-{工程名}-{序号}  
 runner tags如下："runner名称";"执行器类型 docker/shell/ssh等";"打包工具 maven/npmD等";"环境 /dev/test/prod等";  
 
-###3.3.2配置过程
+### 4.3.2配置过程
 进入上步创建的容器示例，注册gitlab  
 ```
 docker exec -it gitlab-runner-sample-01 /bin/bash  
