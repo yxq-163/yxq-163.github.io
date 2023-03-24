@@ -30,3 +30,6 @@ docker-build-and-deploy-k8s:
 
   rules:
     - allow_failure: true
+    - if: $CI_COMMIT_BRANCH_NAME == "master"
+      when: always
+    - when: never
