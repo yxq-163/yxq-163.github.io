@@ -27,7 +27,6 @@ docker-build-and-deploy-k8s:
 
     - envsubst < deploy/prod/devops-svc.yaml | kubectl apply -f -  #再创建 service deployment pod
     - envsubst < deploy/prod/devops.yaml | kubectl apply -f -
-    - sleep 6000
 
   rules:
     - allow_failure: true
