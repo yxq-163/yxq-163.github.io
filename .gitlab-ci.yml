@@ -6,7 +6,7 @@ variables:
   #下面流水线需要用到的变量
   HARBOR_NAMESPACE: 'library'
   BRANCH_NAME: master
-  APP_NAME: 'vue-sample-1'
+  APP_NAME: 'vue-ci-sample'
   BUILD_NUMBER: $CI_PIPELINE_ID
 
 
